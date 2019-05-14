@@ -5,12 +5,15 @@ import RelayConnection from "./RelayConnection";
 class AdamiteServer {
   public config: any;
 
+  public adamiteConfig: any;
+
   public commands: any;
 
   public server: any;
 
-  constructor(config: any) {
-    this.config = config;
+  constructor(relayConfig: any, adamiteConfig: any) {
+    this.config = relayConfig;
+    this.adamiteConfig = adamiteConfig;
     this.commands = {};
     this.server = Server();
     this.listenForMessages();
