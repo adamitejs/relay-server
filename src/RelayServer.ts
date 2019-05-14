@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
 import * as Server from "socket.io";
-import AdamiteConnection from "./AdamiteConnection";
+import RelayConnection from "./RelayConnection";
 
 class AdamiteServer {
   public config: any;
@@ -30,7 +30,7 @@ class AdamiteServer {
     this.server.on("connection", async (socket: any) => {
       const isKeyValid = await this.validateKey(socket);
       if (!isKeyValid) return socket.disconnect();
-      new AdamiteConnection(this, socket);
+      new RelayConnection(this, socket);
     });
   }
 

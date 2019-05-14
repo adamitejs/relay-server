@@ -1,12 +1,12 @@
 import index from "../src/index";
-import AdamiteServer from "../src/AdamiteServer";
-jest.mock("../src/AdamiteServer");
+import RelayServer from "../src/RelayServer";
+jest.mock("../src/RelayServer");
 
 describe("index", () => {
-  it("should return an AdamiteServer instance", () => {
+  it("should return an RelayServer instance", () => {
     const mockConfig = { abc: "123" };
     const server = index(mockConfig);
-    expect(AdamiteServer).toHaveBeenCalledWith(mockConfig);
-    expect(server).toBe((AdamiteServer as any).mock.instances[0]);
+    expect(RelayServer).toHaveBeenCalledWith(mockConfig);
+    expect(server).toBe((RelayServer as any).mock.instances[0]);
   });
 });

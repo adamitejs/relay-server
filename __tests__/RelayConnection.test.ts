@@ -1,13 +1,13 @@
-import AdamiteConnection from "../src/AdamiteConnection";
+import RelayConnection from "../src/RelayConnection";
 
-describe("AdamiteConnection", () => {
+describe("RelayConnection", () => {
   const mockRequest = { _query: {} };
   describe("constructor", () => {
-    it("should construct an AdamiteConnection", () => {
+    it("should construct an RelayConnection", () => {
       const mockServer = "mockServer";
       const mockSocket = { request: mockRequest, on: jest.fn() };
 
-      const client = new AdamiteConnection(mockServer, mockSocket);
+      const client = new RelayConnection(mockServer, mockSocket);
 
       expect(client).toBeDefined();
       expect(client.server).toBe(mockServer);
@@ -19,7 +19,7 @@ describe("AdamiteConnection", () => {
       const mockServer = "mockServer";
       const mockSocket = { request: mockRequest, on: jest.fn() };
 
-      const client = new AdamiteConnection(mockServer, mockSocket);
+      const client = new RelayConnection(mockServer, mockSocket);
 
       expect(mockSocket.on).toBeCalledWith("command", expect.any(Function));
     });
@@ -34,7 +34,7 @@ describe("AdamiteConnection", () => {
         id: "socket-id"
       };
 
-      const client = new AdamiteConnection(mockServer, mockSocket);
+      const client = new RelayConnection(mockServer, mockSocket);
 
       expect(client.id).toBe(mockSocket.id);
     });
@@ -45,7 +45,7 @@ describe("AdamiteConnection", () => {
       const mockServer = "mockServer";
       const mockSocket = { request: mockRequest, on: jest.fn() };
 
-      const client = new AdamiteConnection(mockServer, mockSocket);
+      const client = new RelayConnection(mockServer, mockSocket);
 
       expect(mockSocket.on).toBeCalledWith("command", expect.any(Function));
     });
@@ -57,7 +57,7 @@ describe("AdamiteConnection", () => {
       const mockData = { name: "test", args: { xyz: "123" } };
       const mockCallback = jest.fn();
 
-      const client = new AdamiteConnection(mockServer, mockSocket);
+      const client = new RelayConnection(mockServer, mockSocket);
       const mockCommandHandler = mockSocket.on.mock.calls[1][1];
 
       mockCommandHandler(mockData, mockCallback);
@@ -71,7 +71,7 @@ describe("AdamiteConnection", () => {
       const mockData = { name: "test", args: { xyz: "123" } };
       const mockCallback = jest.fn();
 
-      const client = new AdamiteConnection(mockServer, mockSocket);
+      const client = new RelayConnection(mockServer, mockSocket);
       const mockCommandHandler = mockSocket.on.mock.calls[0][1];
 
       mockCommandHandler(mockData, mockCallback);

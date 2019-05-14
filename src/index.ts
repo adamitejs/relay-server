@@ -1,5 +1,5 @@
-import AdamiteServer from "./AdamiteServer";
+import RelayServer from "./RelayServer";
 
-export default function(config: any) {
-  return new AdamiteServer(config);
+export default function(config: any): RelayServer {
+  return new RelayServer(config);
 }

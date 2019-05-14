@@ -1,13 +1,13 @@
 import fetch from "node-fetch";
 import * as Server from "socket.io";
-import AdamiteServer from "../src/AdamiteServer";
-import AdamiteConnection from "../src/AdamiteConnection";
+import RelayServer from "../src/RelayServer";
+import RelayConnection from "../src/RelayConnection";
 
 jest.mock("node-fetch");
 jest.mock("socket.io");
-jest.mock("../src/AdamiteConnection");
+jest.mock("../src/RelayConnection");
 
-describe("AdamiteServer", () => {
+describe("RelayServer", () => {
   const mockServerInstance = {
     on: jest.fn(),
     listen: jest.fn()
@@ -19,14 +19,14 @@ describe("AdamiteServer", () => {
 
   beforeEach(() => {
     (fetch as any).mockReset();
-    (AdamiteConnection as any).mockReset();
+    (RelayConnection as any).mockReset();
     mockServerInstance.on.mockReset();
   });
 
   describe("constructor", () => {
-    it("should construct an AdamiteServer", () => {
+    it("should construct an RelayServer", () => {
       const mockConfig = { xy: "123" };
-      const server = new AdamiteServer(mockConfig);
+      const server = new RelayServer(mockConfig);
 
       expect(server.config).toEqual(mockConfig);
       expect(server.commands).toEqual({});
@@ -35,7 +35,7 @@ describe("AdamiteServer", () => {
 
     it("should listen for messages", () => {
       const mockConfig = { xy: "123" };
-      new AdamiteServer(mockConfig);
+      new RelayServer(mockConfig);
 
       expect(mockServerInstance.on).toBeCalledWith("connection", expect.any(Function));
     });
@@ -44,7 +44,7 @@ describe("AdamiteServer", () => {
   describe("start", () => {
     it("should start the socket.io server", () => {
       const mockConfig = { port: 9000 };
-      const server = new AdamiteServer(mockConfig);
+      const server = new RelayServer(mockConfig);
       server.start();
       expect(mockServerInstance.listen).toBeCalledWith(mockConfig.port);
     });
@@ -56,7 +56,7 @@ describe("AdamiteServer", () => {
       const mockCommandName = "test";
       const mockCommandHandler = jest.fn();
 
-      const server = new AdamiteServer(mockConfig);
+      const server = new RelayServer(mockConfig);
       server.command(mockCommandName, mockCommandHandler);
 
       expect(server.commands[mockCommandName]).toBe(mockCommandHandler);
@@ -66,7 +66,7 @@ describe("AdamiteServer", () => {
   describe("listenForMessages", () => {
     it("should subscribe to the connection event", () => {
       const mockConfig = { xy: "123" };
-      new AdamiteServer(mockConfig);
+      new RelayServer(mockConfig);
       expect(mockServerInstance.on).toBeCalledWith("connection", expect.any(Function));
     });
 
@@ -77,7 +77,7 @@ describe("AdamiteServer", () => {
         request: { _query: { key: "1234" } }
       };
 
-      const server = new AdamiteServer(mockConfig);
+      const server = new RelayServer(mockConfig);
       server.validateKey = jest.fn().mockResolvedValue(true);
 
       const connectionHandler = mockServerInstance.on.mock.calls[0][1];
@@ -93,7 +93,7 @@ describe("AdamiteServer", () => {
         request: { _query: { key: "1234" } }
       };
 
-      const server = new AdamiteServer(mockConfig);
+      const server = new RelayServer(mockConfig);
       server.validateKey = jest.fn().mockResolvedValue(false);
 
       const connectionHandler = mockServerInstance.on.mock.calls[0][1];
@@ -109,13 +109,13 @@ describe("AdamiteServer", () => {
         request: { _query: { key: "1234" } }
       };
 
-      const server = new AdamiteServer(mockConfig);
+      const server = new RelayServer(mockConfig);
       server.validateKey = jest.fn().mockResolvedValue(true);
 
       const connectionHandler = mockServerInstance.on.mock.calls[0][1];
       await connectionHandler(mockSocket);
 
-      expect(AdamiteConnection).toBeCalledWith(server, mockSocket);
+      expect(RelayConnection).toBeCalledWith(server, mockSocket);
     });
   });
 
@@ -127,7 +127,7 @@ describe("AdamiteServer", () => {
         request: { _query: {} }
       };
 
-      const server = new AdamiteServer(mockConfig);
+      const server = new RelayServer(mockConfig);
       const result = await server.validateKey(mockSocket);
 
       expect(result).toBe(false);
@@ -142,7 +142,7 @@ describe("AdamiteServer", () => {
 
       (fetch as any).mockResolvedValue({ status: 200 });
 
-      const server = new AdamiteServer(mockConfig);
+      const server = new RelayServer(mockConfig);
       const result = await server.validateKey(mockSocket);
 
       expect(fetch).toBeCalledWith(`${mockConfig.apiUrl}/api/keys/mock-key`);
@@ -160,7 +160,7 @@ describe("AdamiteServer", () => {
 
       (fetch as any).mockResolvedValue({ status: 200 });
 
-      const server = new AdamiteServer(mockConfig);
+      const server = new RelayServer(mockConfig);
       const result = await server.validateKey(mockSocket);
 
       expect(fetch).toBeCalledWith(`${mockConfig.apiUrl}/api/keys/mock-key?origin=localhost`);
@@ -178,7 +178,7 @@ describe("AdamiteServer", () => {
 
       (fetch as any).mockResolvedValue({ status: 200 });
 
-      const server = new AdamiteServer(mockConfig);
+      const server = new RelayServer(mockConfig);
       const result = await server.validateKey(mockSocket);
 
       expect(result).toBe(true);
@@ -196,7 +196,7 @@ describe("AdamiteServer", () => {
 
       (fetch as any).mockResolvedValue({ status: 404 });
 
-      const server = new AdamiteServer(mockConfig);
+      const server = new RelayServer(mockConfig);
       const result = await server.validateKey(mockSocket);
 
       expect(result).toBe(false);
