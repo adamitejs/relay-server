@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 import * as Server from "socket.io";
 import RelayConnection from "./RelayConnection";
 
-class AdamiteServer {
+class RelayServer {
   public config: any;
 
   public adamiteConfig: any;
@@ -50,4 +50,4 @@ class AdamiteServer {
   }
 }
 
-export default AdamiteServer;
+export default RelayServer;

@@ -1,18 +1,17 @@
 import * as jsonwebtoken from "jsonwebtoken";
+import RelayServer from "./RelayServer";
+import { AuthServiceToken } from "@adamite/sdk";
 
-class AdamiteConnection {
-  public server: any;
+class RelayConnection {
+  public server: RelayServer;
 
   public socket: any;
 
-  public data: any;
+  public auth: AuthServiceToken | undefined;
 
-  public auth: any;
-
-  constructor(server: any, socket: any) {
+  constructor(server: RelayServer, socket: any) {
     this.server = server;
     this.socket = socket;
-    this.data = {};
     this.loadAuthStateFromQuery();
     this.listenForMessages();
   }
@@ -24,7 +23,7 @@ class AdamiteConnection {
   listenForMessages() {
     this.socket.on("authStateChange", (data: any) => {
       if (!data.token) return;
-      this.auth = jsonwebtoken.verify(data.token, this.server.config.auth.secret);
+      this.auth = jsonwebtoken.verify(data.token, this.server.adamiteConfig.auth.secret) as AuthServiceToken;
     });
 
     this.socket.on("command", (data: any, callback: any) => {
@@ -36,8 +35,9 @@ class AdamiteConnection {
 
   loadAuthStateFromQuery() {
     if (!this.socket.request._query.token || this.socket.request._query.token === "") return;
-    this.auth = jsonwebtoken.decode(this.socket.request._query.token);
+    const token = this.socket.request._query.token;
+    this.auth = jsonwebtoken.verify(token, this.server.adamiteConfig.auth.secret) as AuthServiceToken;
   }
 }
 
-export default AdamiteConnection;
+export default RelayConnection;
