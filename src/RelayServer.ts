@@ -1,9 +1,10 @@
 import fetch from "node-fetch";
 import * as Server from "socket.io";
 import RelayConnection from "./RelayConnection";
+import { RelayServerConfig } from "./RelayTypes";
 
 class RelayServer {
-  public config: any;
+  public config: RelayServerConfig;
 
   public adamiteConfig: any;
 
@@ -11,7 +12,7 @@ class RelayServer {
 
   public server: any;
 
-  constructor(relayConfig: any, adamiteConfig: any) {
+  constructor(relayConfig: RelayServerConfig, adamiteConfig: any) {
     this.config = relayConfig;
     this.adamiteConfig = adamiteConfig;
     this.commands = {};
