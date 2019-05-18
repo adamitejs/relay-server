@@ -11,6 +11,9 @@
     "watch": "tsc-watch",
     "prepare": "npm run build"
   },
+  "files": [
+    "dist/**/*"
+  ],
   "dependencies": {
     "jsonwebtoken": "^8.5.1",
     "node-fetch": "^2.3.0",
