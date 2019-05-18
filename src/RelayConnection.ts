@@ -1,6 +1,6 @@
 import * as jsonwebtoken from "jsonwebtoken";
 import RelayServer from "./RelayServer";
-import { AuthServiceToken } from "@adamite/sdk";
+import { AuthServiceToken } from "../../sdk";
 
 class RelayConnection {
   public server: RelayServer;
@@ -23,7 +23,10 @@ class RelayConnection {
   listenForMessages() {
     this.socket.on("authStateChange", (data: any) => {
       if (!data.token) return;
-      this.auth = jsonwebtoken.verify(data.token, this.server.adamiteConfig.auth.secret) as AuthServiceToken;
+      this.auth = jsonwebtoken.verify(
+        data.token,
+        this.server.adamiteConfig.auth.secret
+      ) as AuthServiceToken;
     });
 
     this.socket.on("command", (data: any, callback: any) => {
@@ -34,9 +37,16 @@ class RelayConnection {
   }
 
   loadAuthStateFromQuery() {
-    if (!this.socket.request._query.token || this.socket.request._query.token === "") return;
+    if (
+      !this.socket.request._query.token ||
+      this.socket.request._query.token === ""
+    )
+      return;
     const token = this.socket.request._query.token;
-    this.auth = jsonwebtoken.verify(token, this.server.adamiteConfig.auth.secret) as AuthServiceToken;
+    this.auth = jsonwebtoken.verify(
+      token,
+      this.server.adamiteConfig.auth.secret
+    ) as AuthServiceToken;
   }
 }
 

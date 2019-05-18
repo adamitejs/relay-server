@@ -2,30 +2,6 @@
 # yarn lockfile v1
 
 
-"@adamite/relay@https://github.com/adamitejs/relay.git":
-  version "0.1.0"
-  resolved "https://github.com/adamitejs/relay.git#5ea1e1dc99077534264d7cf2f69a355f5a672933"
-  dependencies:
-    jsonwebtoken "^8.5.1"
-    node-fetch "^2.3.0"
-    querystring "^0.2.0"
-    socket.io "^2.2.0"
-    socket.io-client "^2.2.0"
-    uuid "^3.3.2"
-    uws "10.148.1"
-
-"@adamite/sdk@https://github.com/adamitejs/sdk.git":
-  version "0.1.0"
-  resolved "https://github.com/adamitejs/sdk.git#a6252a4d497d3810e3439e07da9282c09514c6a4"
-  dependencies:
-    "@adamite/relay" "https://github.com/adamitejs/relay.git"
-    "@types/jsonwebtoken" "^8.3.2"
-    "@types/socket.io-client" "^1.4.32"
-    jsonwebtoken "^8.5.1"
-    lodash "^4.17.11"
-    node-fetch "^2.3.0"
-    socket.io-client "^2.2.0"
-
 "@babel/code-frame@^7.0.0":
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.0.0.tgz#06e2ab19bdb535385559aabb5ba59729482800f8"
@@ -385,11 +361,6 @@
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/@types/normalize-package-data/-/normalize-package-data-2.4.0.tgz#e486d0d97396d79beedd0a6e33f4534ff6b4973e"
   integrity sha512-f5j5b/Gf71L+dbqxIpQ4Z2WlmI/mPJ0fOkGGmFgtb6sAu97EPczzbS3/tJKxmcYDj55OX6ssqwDAWOHIYDRDGA==
-
-"@types/socket.io-client@^1.4.32":
-  version "1.4.32"
-  resolved "https://registry.yarnpkg.com/@types/socket.io-client/-/socket.io-client-1.4.32.tgz#988a65a0386c274b1c22a55377fab6a30789ac14"
-  integrity sha512-Vs55Kq8F+OWvy1RLA31rT+cAyemzgm0EWNeax6BWF8H7QiiOYMJIdcwSDdm5LVgfEkoepsWkS+40+WNb7BUMbg==
 
 "@types/socket.io@^2.1.2":
   version "2.1.2"
@@ -3372,11 +3343,6 @@ qs@~6.5.2:
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
   integrity sha512-N5ZAX4/LxJmF+7wN74pUD6qAh9/wnvdQcjq9TZjevvXzSUo7bfmw91saqMjzGS2xq91/odN2dW/WOl7qQHNDGA==
 
-querystring@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/querystring/-/querystring-0.2.0.tgz#b209849203bb25df820da756e747005878521620"
-  integrity sha1-sgmEkgO7Jd+CDadW50cAWHhSFiA=
-
 rc@^1.2.7:
   version "1.2.8"
   resolved "https://registry.yarnpkg.com/rc/-/rc-1.2.8.tgz#cd924bf5200a075b83c188cd6b9e211b7fc0d3ed"
@@ -3714,7 +3680,7 @@ socket.io-adapter@~1.1.0:
   resolved "https://registry.yarnpkg.com/socket.io-adapter/-/socket.io-adapter-1.1.1.tgz#2a805e8a14d6372124dd9159ad4502f8cb07f06b"
   integrity sha1-KoBeihTWNyEk3ZFZrUUC+MsH8Gs=
 
-socket.io-client@2.2.0, socket.io-client@^2.2.0:
+socket.io-client@2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/socket.io-client/-/socket.io-client-2.2.0.tgz#84e73ee3c43d5020ccc1a258faeeb9aec2723af7"
   integrity sha512-56ZrkTDbdTLmBIyfFYesgOxsjcLnwAKoN4CiPyTVkMQj3zTUh0QAx3GbvIvLpFEOvQWu92yyWICxB0u7wkVbYA==
@@ -4182,11 +4148,6 @@ uuid@^3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
   integrity sha512-yXJmeNaw3DnnKAOKJE51sL/ZaYfWJRl1pK9dr19YFCu0ObS231AB1/LbqTKRAQ5kw8A90rA6fr4riOUpTZvQZA==
-
-uws@10.148.1:
-  version "10.148.1"
-  resolved "https://registry.yarnpkg.com/uws/-/uws-10.148.1.tgz#fd1a79cf6118a388e0a1bed8a1397030d2c4fd2c"
-  integrity sha1-/Rp5z2EYo4jgob7YoTlwMNLE/Sw=
 
 validate-npm-package-license@^3.0.1:
   version "3.0.4"

@@ -8,11 +8,9 @@
   "scripts": {
     "test": "jest",
     "build": "tsc",
-    "watch": "tsc-watch",
-    "prepare": "npm run build"
+    "watch": "tsc-watch"
   },
   "dependencies": {
-    "@adamite/sdk": "https://github.com/adamitejs/sdk.git",
     "jsonwebtoken": "^8.5.1",
     "node-fetch": "^2.3.0",
     "socket.io": "^2.2.0"
