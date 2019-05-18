@@ -1,6 +1,6 @@
 import * as jsonwebtoken from "jsonwebtoken";
 import RelayServer from "./RelayServer";
-import { AuthServiceToken } from "../../sdk";
+import { AuthServiceToken } from "./RelayTypes";
 
 class RelayConnection {
   public server: RelayServer;
