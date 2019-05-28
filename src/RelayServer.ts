@@ -1,22 +1,31 @@
+import * as express from "express";
+import * as http from "http";
+import * as io from "socket.io";
+import * as path from "path";
 import fetch from "node-fetch";
-import * as Server from "socket.io";
 import RelayConnection from "./RelayConnection";
 import { RelayServerConfig } from "./RelayTypes";
 
 class RelayServer {
+  public app: express.Application;
+
+  public server: http.Server;
+
+  public io: io.Server;
+
   public config: RelayServerConfig;
 
   public adamiteConfig: any;
 
   public commands: any;
 
-  public server: any;
-
   constructor(relayConfig: RelayServerConfig, adamiteConfig: any) {
     this.config = relayConfig;
     this.adamiteConfig = adamiteConfig;
+    this.app = express();
+    this.server = new http.Server(this.app);
+    this.io = io(this.server);
     this.commands = {};
-    this.server = Server();
     this.listenForMessages();
   }
 
@@ -31,7 +40,16 @@ class RelayServer {
   }
 
   listenForMessages() {
-    this.server.on("connection", async (socket: any) => {
+    this.app.get("/", (req, res) => {
+      res.json({
+        name: require(path.join(process.cwd(), "package.json")).name,
+        version: require(path.join(process.cwd(), "package.json")).version,
+        relay: require("../package.json").version,
+        service: this.config.name
+      });
+    });
+
+    this.io.on("connection", async (socket: any) => {
       const isKeyValid = await this.validateKey(socket);
       if (!isKeyValid) return socket.disconnect();
       new RelayConnection(this, socket);

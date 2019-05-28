@@ -4,6 +4,7 @@ export type AuthServiceToken = {
 };
 
 export type RelayServerConfig = {
+  name: string;
   apiUrl: string;
   port: number;
 };
