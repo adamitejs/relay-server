@@ -50,22 +50,33 @@ class RelayServer {
     });
 
     this.io.on("connection", async (socket: any) => {
-      const isKeyValid = await this.validateKey(socket);
-      if (!isKeyValid) return socket.disconnect();
-      new RelayConnection(this, socket);
+      try {
+        await this.validateKey(socket);
+        this.validateSecret(socket);
+        new RelayConnection(this, socket);
+      } catch (err) {
+        console.error(err);
+        socket.disconnect();
+      }
     });
   }
 
   async validateKey(socket: any) {
     const { key } = socket.request._query;
-    if (!key) return false;
+    if (!key) throw new Error("Invalid API key.");
 
     const url = socket.request.headers.origin
       ? `${this.config.apiUrl}/api/keys/${key}?origin=${encodeURIComponent(socket.request.headers.origin)}`
       : `${this.config.apiUrl}/api/keys/${key}`;
 
     const { status } = await fetch(url);
-    return status === 200;
+    if (status !== 200) throw new Error("Invalid API key.");
+  }
+
+  validateSecret(socket: any) {
+    const { secret } = socket.request._query;
+    if (!secret) return;
+    if (secret !== this.adamiteConfig.api.secret) throw new Error("Invalid secret.");
   }
 }
 
