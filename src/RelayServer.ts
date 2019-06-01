@@ -17,6 +17,7 @@ class RelayServer {
     this.adamiteConfig = adamiteConfig;
     this.commands = {};
     this.server = Server();
+    this.server.origins("*.*");
     this.listenForMessages();
   }
 
