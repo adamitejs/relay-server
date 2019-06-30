@@ -25,7 +25,7 @@ describe("RelayServer", () => {
 
   describe("constructor", () => {
     it("should construct an RelayServer", () => {
-      const mockConfig = { apiUrl: "", port: 8000 };
+      const mockConfig = { name: "service", apiUrl: "", port: 8000 };
       const server = new RelayServer(mockConfig, {});
 
       expect(server.config).toEqual(mockConfig);
@@ -34,19 +34,16 @@ describe("RelayServer", () => {
     });
 
     it("should listen for messages", () => {
-      const mockConfig = { apiUrl: "", port: 8000 };
+      const mockConfig = { name: "service", apiUrl: "", port: 8000 };
       new RelayServer(mockConfig, {});
 
-      expect(mockServerInstance.on).toBeCalledWith(
-        "connection",
-        expect.any(Function)
-      );
+      expect(mockServerInstance.on).toBeCalledWith("connection", expect.any(Function));
     });
   });
 
   describe("start", () => {
     it("should start the socket.io server", () => {
-      const mockConfig = { apiUrl: "", port: 9000 };
+      const mockConfig = { name: "service", apiUrl: "", port: 9000 };
       const server = new RelayServer(mockConfig, {});
       server.start();
       expect(mockServerInstance.listen).toBeCalledWith(mockConfig.port);
@@ -55,7 +52,7 @@ describe("RelayServer", () => {
 
   describe("command", () => {
     it("should register the command", () => {
-      const mockConfig = { apiUrl: "", port: 9000 };
+      const mockConfig = { name: "service", apiUrl: "", port: 9000 };
       const mockCommandName = "test";
       const mockCommandHandler = jest.fn();
 
@@ -68,16 +65,13 @@ describe("RelayServer", () => {
 
   describe("listenForMessages", () => {
     it("should subscribe to the connection event", () => {
-      const mockConfig = { apiUrl: "", port: 9000 };
+      const mockConfig = { name: "service", apiUrl: "", port: 9000 };
       new RelayServer(mockConfig, {});
-      expect(mockServerInstance.on).toBeCalledWith(
-        "connection",
-        expect.any(Function)
-      );
+      expect(mockServerInstance.on).toBeCalledWith("connection", expect.any(Function));
     });
 
     it("should validate the incoming connection key", () => {
-      const mockConfig = { apiUrl: "", port: 9000 };
+      const mockConfig = { name: "service", apiUrl: "", port: 9000 };
       const mockSocket = {
         disconnect: jest.fn(),
         request: { _query: { key: "1234" } }
@@ -93,7 +87,7 @@ describe("RelayServer", () => {
     });
 
     it("should disconnect if the key is invalid", async () => {
-      const mockConfig = { apiUrl: "", port: 9000 };
+      const mockConfig = { name: "service", apiUrl: "", port: 9000 };
       const mockSocket = {
         disconnect: jest.fn(),
         request: { _query: { key: "1234" } }
@@ -109,7 +103,7 @@ describe("RelayServer", () => {
     });
 
     it("should create a new client if the token is valid", async () => {
-      const mockConfig = { apiUrl: "", port: 9000 };
+      const mockConfig = { name: "service", apiUrl: "", port: 9000 };
       const mockSocket = {
         disconnect: jest.fn(),
         request: { _query: { key: "1234" } }
@@ -127,7 +121,7 @@ describe("RelayServer", () => {
 
   describe("validateKey", () => {
     it("should return false if no key is passed", async () => {
-      const mockConfig = { apiUrl: "", port: 9000 };
+      const mockConfig = { name: "service", apiUrl: "", port: 9000 };
       const mockSocket = {
         disconnect: jest.fn(),
         request: { _query: {} }
@@ -140,7 +134,7 @@ describe("RelayServer", () => {
     });
 
     it("should request the API with no origin", async () => {
-      const mockConfig = { apiUrl: "http://localhost:3000", port: 8000 };
+      const mockConfig = { name: "service", apiUrl: "http://localhost:3000", port: 8000 };
       const mockSocket = {
         disconnect: jest.fn(),
         request: { headers: {}, _query: { key: "mock-key" } }
@@ -155,7 +149,7 @@ describe("RelayServer", () => {
     });
 
     it("should request the API with origins", async () => {
-      const mockConfig = { apiUrl: "http://localhost:3000", port: 8000 };
+      const mockConfig = { name: "service", apiUrl: "http://localhost:3000", port: 8000 };
       const mockSocket = {
         disconnect: jest.fn(),
         request: {
@@ -169,13 +163,11 @@ describe("RelayServer", () => {
       const server = new RelayServer(mockConfig, {});
       const result = await server.validateKey(mockSocket);
 
-      expect(fetch).toBeCalledWith(
-        `${mockConfig.apiUrl}/api/keys/mock-key?origin=localhost`
-      );
+      expect(fetch).toBeCalledWith(`${mockConfig.apiUrl}/api/keys/mock-key?origin=localhost`);
     });
 
     it("should return true if the returned status is 200", async () => {
-      const mockConfig = { apiUrl: "http://localhost:3000", port: 8000 };
+      const mockConfig = { name: "service", apiUrl: "http://localhost:3000", port: 8000 };
       const mockSocket = {
         disconnect: jest.fn(),
         request: {
@@ -193,7 +185,7 @@ describe("RelayServer", () => {
     });
 
     it("should return false if the returned status is not 200", async () => {
-      const mockConfig = { apiUrl: "http://localhost:3000", port: 8000 };
+      const mockConfig = { name: "service", apiUrl: "http://localhost:3000", port: 8000 };
       const mockSocket = {
         disconnect: jest.fn(),
         request: {
