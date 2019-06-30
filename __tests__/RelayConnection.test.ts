@@ -6,7 +6,7 @@ describe("RelayConnection", () => {
   const mockRequest = { _query: {} };
   describe("constructor", () => {
     it("should construct an RelayConnection", () => {
-      const mockConfig = { apiUrl: "", port: 8000 };
+      const mockConfig = { name: "service", apiUrl: "", port: 8000 };
       const mockServer = new RelayServer(mockConfig, {});
       const mockSocket = { request: mockRequest, on: jest.fn() };
 
@@ -18,7 +18,7 @@ describe("RelayConnection", () => {
     });
 
     it("should listen for messages", () => {
-      const mockConfig = { apiUrl: "", port: 8000 };
+      const mockConfig = { name: "service", apiUrl: "", port: 8000 };
       const mockServer = new RelayServer(mockConfig, {});
       const mockSocket = { request: mockRequest, on: jest.fn() };
 
@@ -30,7 +30,7 @@ describe("RelayConnection", () => {
 
   describe("id", () => {
     it("should return an id", () => {
-      const mockConfig = { apiUrl: "", port: 8000 };
+      const mockConfig = { name: "service", apiUrl: "", port: 8000 };
       const mockServer = new RelayServer(mockConfig, {});
       const mockSocket = {
         request: mockRequest,
@@ -45,7 +45,7 @@ describe("RelayConnection", () => {
 
   describe("listenForMessages", () => {
     it("should subscribe to the command event", () => {
-      const mockConfig = { apiUrl: "", port: 8000 };
+      const mockConfig = { name: "service", apiUrl: "", port: 8000 };
       const mockServer = new RelayServer(mockConfig, {});
       const mockSocket = { request: mockRequest, on: jest.fn() };
       new RelayConnection(mockServer, mockSocket);
@@ -55,7 +55,7 @@ describe("RelayConnection", () => {
 
     it("should invoke a command handler if one is registered", () => {
       const mockServerHandler = jest.fn();
-      const mockConfig = { apiUrl: "", port: 8000 };
+      const mockConfig = { name: "service", apiUrl: "", port: 8000 };
       const mockServer = new RelayServer(mockConfig, {});
       mockServer.commands = { test: mockServerHandler };
       const mockSocket = { request: mockRequest, on: jest.fn() };
@@ -67,15 +67,11 @@ describe("RelayConnection", () => {
 
       mockCommandHandler(mockData, mockCallback);
 
-      expect(mockServerHandler).toBeCalledWith(
-        client,
-        mockData.args,
-        mockCallback
-      );
+      expect(mockServerHandler).toBeCalledWith(client, mockData.args, mockCallback);
     });
 
     it("should not invoke a handler if one is not defined", () => {
-      const mockConfig = { apiUrl: "", port: 8000 };
+      const mockConfig = { name: "service", apiUrl: "", port: 8000 };
       const mockServer = new RelayServer(mockConfig, {});
       const mockSocket = { request: mockRequest, on: jest.fn() };
       const mockData = { name: "test", args: { xyz: "123" } };
