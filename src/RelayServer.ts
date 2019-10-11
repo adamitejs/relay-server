@@ -30,6 +30,7 @@ class RelayServer {
   }
 
   start() {
+    console.log(`[${this.config.name}] Listening on port ${this.config.port}`);
     this.server.listen(this.config.port);
     return this;
   }
