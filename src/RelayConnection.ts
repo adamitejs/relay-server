@@ -23,7 +23,7 @@ class RelayConnection {
   listenForMessages() {
     this.socket.on("authStateChange", (data: any) => {
       if (!data.token) return;
-      this.auth = jsonwebtoken.verify(data.token, this.server.adamiteConfig.auth.secret) as AuthServiceToken;
+      this.auth = jsonwebtoken.verify(data.token, this.server.adamiteConfig.services.auth.config.secret) as AuthServiceToken;
     });
 
     this.socket.on("command", (data: any, callback: any) => {
