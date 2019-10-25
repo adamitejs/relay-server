@@ -15,12 +15,15 @@ class RelayServer {
 
   public config: RelayServerConfig;
 
+  public serviceConfig: any;
+
   public adamiteConfig: any;
 
   public commands: any;
 
-  constructor(relayConfig: RelayServerConfig, adamiteConfig: any) {
+  constructor(relayConfig: RelayServerConfig, serviceConfig: any, adamiteConfig: any) {
     this.config = relayConfig;
+    this.serviceConfig = serviceConfig;
     this.adamiteConfig = adamiteConfig;
     this.app = express();
     this.server = new http.Server(this.app);
@@ -77,7 +80,7 @@ class RelayServer {
   validateSecret(socket: any) {
     const { secret } = socket.request._query;
     if (!secret) return;
-    if (secret !== this.adamiteConfig.api.secret) throw new Error("Invalid secret.");
+    if (secret !== this.adamiteConfig.secret) throw new Error("Invalid secret.");
   }
 }
 

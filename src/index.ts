@@ -1,5 +1,5 @@
 import RelayServer from "./RelayServer";
 
-export default function(relayConfig: any, adamiteConfig: any): RelayServer {
-  return new RelayServer(relayConfig, adamiteConfig);
+export default function(relayConfig: any, serviceConfig: any, adamiteConfig: any): RelayServer {
+  return new RelayServer(relayConfig, serviceConfig, adamiteConfig);
 }
