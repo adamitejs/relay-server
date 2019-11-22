@@ -3,7 +3,14 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "start": "node index.js",
+    "watch": "nodemon index.js"
+  },
   "dependencies": {
     "@adamite/relay-server": "../"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.1"
   }
 }
