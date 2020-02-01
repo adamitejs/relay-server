@@ -2,7 +2,6 @@ import * as io from "socket.io";
 import { RelayServerConfig } from "./types/RelayServerConfig";
 import RelayClient from "./RelayClient";
 import { RelayCommandHandler } from "./types/RelayCommandHandler";
-import { RelayInvokeCommandArgs } from "./types/RelayInvokeCommandArgs";
 
 export default class RelayServer {
   public server: io.Server;
