@@ -1,87 +1,54 @@
-import * as express from "express";
-import * as http from "http";
 import * as io from "socket.io";
-import * as path from "path";
-import fetch from "node-fetch";
-import RelayConnection from "./RelayConnection";
-import { RelayServerConfig } from "./RelayTypes";
+import { RelayServerConfig } from "./types/RelayServerConfig";
+import RelayClient from "./RelayClient";
+import { RelayCommandHandler } from "./types/RelayCommandHandler";
+import { RelayInvokeCommandArgs } from "./types/RelayInvokeCommandArgs";
 
-class RelayServer {
-  public app: express.Application;
-
-  public server: http.Server;
-
-  public io: io.Server;
-
+export default class RelayServer {
+  public server: io.Server;
   public config: RelayServerConfig;
+  private commands: { [name: string]: RelayCommandHandler } = {};
 
-  public serviceConfig: any;
-
-  public adamiteConfig: any;
-
-  public commands: any;
-
-  constructor(relayConfig: RelayServerConfig, serviceConfig: any, adamiteConfig: any) {
-    this.config = relayConfig;
-    this.serviceConfig = serviceConfig;
-    this.adamiteConfig = adamiteConfig;
-    this.app = express();
-    this.server = new http.Server(this.app);
-    this.io = io(this.server);
-    this.commands = {};
-    this.listenForMessages();
+  constructor(config: RelayServerConfig) {
+    this.config = config;
+    this.server = io(this.config.port);
+    this.handleIncomingConnections();
   }
 
-  start() {
-    console.log(`[${this.config.name}] Listening on port ${this.config.port}`);
-    this.server.listen(this.config.port);
-    return this;
+  command(name: string, handler: RelayCommandHandler) {
+    this.commands[name] = handler;
   }
 
-  command(commandName: string, commandHandler: any) {
-    this.commands[commandName] = commandHandler;
-    return this;
+  async invoke(client: RelayClient, name: string, args?: any) {
+    if (!this.commands[name]) {
+      throw new Error(`Command not found: ${name}`);
+    }
+
+    const handler = this.commands[name];
+    const returnValue = await handler(client, args);
+
+    return returnValue;
   }
 
-  listenForMessages() {
-    this.app.get("/", (req, res) => {
-      res.json({
-        name: require(path.join(process.cwd(), "package.json")).name,
-        version: require(path.join(process.cwd(), "package.json")).version,
-        relay: require("../package.json").version,
-        service: this.config.name
-      });
-    });
-
-    this.io.on("connection", async (socket: any) => {
-      try {
-        await this.validateKey(socket);
-        this.validateSecret(socket);
-        new RelayConnection(this, socket);
-      } catch (err) {
-        console.error(err);
-        socket.disconnect();
-      }
-    });
+  private handleIncomingConnections() {
+    this.server.on("connection", this.handleIncomingConnection.bind(this));
   }
 
-  async validateKey(socket: any) {
-    const { key } = socket.request._query;
-    if (!key) throw new Error("Invalid API key.");
-
-    const url = socket.request.headers.origin
-      ? `${this.config.apiUrl}/api/keys/${key}?origin=${encodeURIComponent(socket.request.headers.origin)}`
-      : `${this.config.apiUrl}/api/keys/${key}`;
-
-    const { status } = await fetch(url);
-    if (status !== 200) throw new Error("Invalid API key.");
+  private handleIncomingConnection(socket: io.Socket) {
+    try {
+      this.validateApiKey(socket);
+      new RelayClient(this, socket);
+    } catch (err) {
+      console.error(err);
+      socket.disconnect(true);
+    }
   }
 
-  validateSecret(socket: any) {
-    const { secret } = socket.request._query;
-    if (!secret) return;
-    if (secret !== this.adamiteConfig.secret) throw new Error("Invalid secret.");
+  private validateApiKey(socket: io.Socket) {
+    const apiKey = socket.handshake.query.key;
+
+    if (apiKey !== this.config.apiKey) {
+      throw new Error(`Invalid API Key: ${apiKey}`);
+    }
   }
 }
-
-export default RelayServer;
